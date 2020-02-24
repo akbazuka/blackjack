@@ -79,12 +79,12 @@ class Player:
         return self._total
 
     def get_chips(self):
-        return self._chips
+        return int(self._chips)
 
-    def sum_points(self, value):
+    def sum_total(self, value):
         self._total += value
     
-    def reset_points(self):
+    def reset_total(self):
         self._total = 0
 
     def add_chips(self, bet):
@@ -112,7 +112,7 @@ def blackey_jackey():
 
         round = 1
         while True:
-            print("\nYou have $",player.get_chips(),"worth of chips.")
+            print("\nYou now have, $",player.get_chips(),"worth of chips.")
 
             if round > 1:
                 if(player.get_chips() > 25):
@@ -143,26 +143,26 @@ def blackey_jackey():
             players_cards = []
 
             #Reset player's and dealer's totals
-            player.reset_points()
-            dealer.reset_points()
+            player.reset_total()
+            dealer.reset_total()
 
             players_cards.append(deck.deal_a_card()) #Dealer deals player a card
-            player.sum_points(players_cards[0]._value)
+            player.sum_total(players_cards[0]._value)
             dealers_cards.append(deck.deal_a_card()) #Dealer deals himself a card
-            dealer.sum_points(dealers_cards[0]._value)
-            dealer_point_first = dealer.get_total()
+            dealer.sum_total(dealers_cards[0]._value)
+            dealer_total_first = dealer.get_total()
 
             players_cards.append(deck.deal_a_card()) #Dealer deals player second card
-            player.sum_points(players_cards[1]._value)
+            player.sum_total(players_cards[1]._value)
             dealers_cards.append(deck.deal_a_card()) #Dealer deals himself second card (facedown)
-            dealer.sum_points(dealers_cards[1]._value)
+            dealer.sum_total(dealers_cards[1]._value)
 
             print("\nDealer has dealt the opening cards.")
 
             print("\nYour cards are:", players_cards[0],players_cards[1])
             print("Your total now, is:", player.get_total())
             print("\nDealer's first card is:", dealers_cards[0])
-            print("Dealer's total on the first card is:", dealer_point_first)
+            print("Dealer's total on the first card is:", dealer_total_first)
 
             #Offer player insurance bet if dealer has a 10 or an ACE as face up card AND if player has enough money to make one
             insurance_bet = 0
@@ -173,7 +173,7 @@ def blackey_jackey():
                 else: 
                     insurance_bet = original_bet/2.0
                     player.sub_chips(insurance_bet)
-                    print("Insurance bet of half of your original bet was placed successfully.")
+                    print("Insurance bet of $",original_bet/2,"was placed successfully.")
 
             if dealer.get_total() == 21:
                 print("Dealer's second card is a", dealers_cards[1])
@@ -182,7 +182,7 @@ def blackey_jackey():
                     player.add_chips(insurance_bet*2 + original_bet*2)
                     print("You won your insurance bet. Your received $",insurance_bet*2 + original_bet*2,"back in chips.")
                 
-                if player.total() != 21:
+                if player.get_total() != 21:
                     print("You lost because your cards did not match the dealer's Blackjack.\n")
                     
                 else: 
@@ -203,7 +203,7 @@ def blackey_jackey():
 
                 #Loop for input validation
                 while True:
-                    player_choice = str(input("\nIt is your turn. What will you choose to do? (stand= s / hit= h / double down= d): "))
+                    player_choice = str(input("\nIt is your turn. What will you choose to do? (s = stand / h = hit / d = double down): "))
 
                     #Player chooses to stand
                     if player_choice.lower() == 's':
@@ -215,10 +215,10 @@ def blackey_jackey():
                         while True:
                             players_cards.append(deck.deal_a_card())
                             print("You chose to hit. You were dealt a", players_cards[-1])
-                            player.sum_points(players_cards[-1]._value)
+                            player.sum_total(players_cards[-1]._value)
                             print("Your total now, is:", player.get_total())
                             if player.get_total() > 21:
-                                print("You lost because your hand was over 21.")
+                                print("\nYOU LOST because your total was over 21.")
                                 lose = 1
                                 break
                             elif player.get_total() == 21:
@@ -233,14 +233,15 @@ def blackey_jackey():
 
                     #Player chooses to double down
                     elif player_choice.lower() == 'd': #Can only double down on first turn
+                        dd = 1
                         print("You chose to double down. Your original bet has been doubled to a total of $", original_bet*2)
                         player.sub_chips(original_bet)
                         players_cards.append(deck.deal_a_card())
                         print("\nThe card you were dealt is a", players_cards[-1])
-                        player.sum_points(players_cards[-1]._value)
+                        player.sum_total(players_cards[-1]._value)
                         print("Your total now, is:", player.get_total())
                         if player.get_total() > 21:
-                            print("You lost because your hand was over 21.")
+                            print("\YOU LOST because your total was over 21.")
                             lose = 1
                         else:
                             print("You are now choosing to stand now by default.")
@@ -252,45 +253,45 @@ def blackey_jackey():
 
                 #Dealer plays if player hasn't lost already
                 if lose == 0:
-                    print("\nIt is now the dealer's turn. \nThe dealer's down card was a",dealers_cards[1])
+                    print("\nIt is now the dealer's turn. \n\nThe dealer's down card was a",dealers_cards[1])
                     print("The dealer's total is:", dealer.get_total())
                     #Dealer continues to hit until a total of 17 or above is reached
                     while dealer.get_total() < 17:
                         dealers_cards.append(deck.deal_a_card())
                         print("\nThe dealer was dealt a", dealers_cards[-1])
-                        dealer.sum_points(dealers_cards[-1]._value)
+                        dealer.sum_total(dealers_cards[-1]._value)
                         print("The dealer's total is now:", dealer.get_total())
                     
                     #If dealer busts
                     if dealer.get_total() > 21:
                         if dd == 1:
-                            print("The dealer's hand was a bust, you win! $",original_bet*4)
+                            print("\nThe dealer's hand was a bust, YOU WIN $",original_bet*4)
                             player.add_chips(original_bet*4)
                         else:
-                            print("The dealer's hand was a bust, you win! $",original_bet*2)
+                            print("\nThe dealer's hand was a bust, YOU WIN $",original_bet*2)
                             player.add_chips(original_bet*2)   
 
                     #If dealer and player have matching hands
                     elif dealer.get_total() == player.get_total():
                         if dd == 1:
-                            print("You have the same total as the dealer. You get back your original bet of $",original_bet*2,"in chips.")
+                            print("\nYou have the same total as the dealer. You get back your original bet of $",original_bet*2,"in chips.")
                             player.add_chips(original_bet*2)
                         else:
-                            print("You the same total as the dealer. You get back your original bet of $",original_bet,"in chips.")
+                            print("\nYou the same total as the dealer. You get back your original bet of $",original_bet,"in chips.")
                             player.add_chips(original_bet)  
                     
                     #If player has bigger hand than dealer
                     elif player.get_total() > dealer.get_total():
                         if dd == 1:
-                            print("Your hand was bigger than the dealer's, you win! $",original_bet*4)
+                            print("\nYour hand was bigger than the dealer's, YOU WIN $",original_bet*4)
                             player.add_chips(original_bet*4)
                         else:
-                            print("Your hand was bigger than the dealer's, you win! $",original_bet*2)
+                            print("\nYour hand was bigger than the dealer's, YOU WIN $",original_bet*2)
                             player.add_chips(original_bet*2)
 
                     #If dealer has bigger hand then player
                     else:
-                        print("Your hand was smaller than the dealer's, you lost.")
+                        print("\nYour hand was smaller than the dealer's, YOU LOST.")
 
             round += 1
 
