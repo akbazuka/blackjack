@@ -103,7 +103,7 @@ def blackey_jackey():
     #print(deck)
 
     print("\n$$$ Welcome to the BLACKJACK table at AK's Casino $$$")
-    print("\nRules of the game are general Blackjack rules (without the optiont to Split). \nIf you are unfamiliar with the rules of Blackjack, please leave AK's Casino.")
+    print("\nRules of the game are general Blackjack rules (without the option to Split). \nIf you are unfamiliar with the rules of Blackjack, please leave AK's Casino.")
 
     answer = str(input("\nCare to risk it all? (yes/no): "))
     if answer.lower() == 'yes':
@@ -169,7 +169,7 @@ def blackey_jackey():
 
             #Offer player insurance bet if dealer has a 10 or an ACE as face up card AND if player has enough money to make one
             insurance_bet = 0
-            if dealers_cards[0].__gt__(10) and player.get_chips() >= original_bet/2:
+            if dealers_cards[0]._value >= 10 and player.get_chips() >= original_bet/2:
                 answer = str(input("\nWould you like to make an insurance bet? (yes/no): "))
                 if answer.lower() != 'yes':
                     print("Insurance bet was not made.")
