@@ -40,6 +40,12 @@ class Card:
     def __le__(self,other):
         return self._value <= other._value
 
+    def __ge__(self,other):
+        return self._value >= other._value
+    
+    def __gt__(self,other):
+        return self._value > other._value
+
     def __eq__(self,other):
         return self._value == other._value
 
@@ -71,10 +77,7 @@ class Player:
     def __init__(self):
         self._total = 0
         self._chips = 1000 #Set how much money player starts with
-    '''
-    def __repr__(self):
-        return self._total
-    '''
+
     def get_total(self):
         return self._total
 
@@ -166,7 +169,7 @@ def blackey_jackey():
 
             #Offer player insurance bet if dealer has a 10 or an ACE as face up card AND if player has enough money to make one
             insurance_bet = 0
-            if dealers_cards[0]._value >= 10 and player.get_chips() >= original_bet/2:
+            if dealers_cards[0].__gt__(10) and player.get_chips() >= original_bet/2:
                 answer = str(input("\nWould you like to make an insurance bet? (yes/no): "))
                 if answer.lower() != 'yes':
                     print("Insurance bet was not made.")
