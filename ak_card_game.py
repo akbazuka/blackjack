@@ -83,6 +83,9 @@ class Player:
 
     def sum_points(self, value):
         self._total += value
+    
+    def reset_points(self):
+        self._total = 0
 
     def add_chips(self, bet):
         self._chips += bet
@@ -96,7 +99,7 @@ def blackey_jackey():
     deck.shuffle() #shuffle the deck
     #print(deck)
 
-    print("$$$ Welcome to the BLACKJACK table at AK's Casino $$$")
+    print("\n$$$ Welcome to the BLACKJACK table at AK's Casino $$$")
     print("\nRules of the game are general Blackjack rules (without the optiont to Split). \nIf you are unfamiliar with the rules of Blackjack, please leave AK's Casino.")
 
     answer = str(input("\nCare to risk it all? (yes/no): "))
@@ -139,6 +142,10 @@ def blackey_jackey():
             #Player enters game:
             players_cards = []
 
+            #Reset player's and dealer's totals
+            player.reset_points()
+            dealer.reset_points()
+
             players_cards.append(deck.deal_a_card()) #Dealer deals player a card
             player.sum_points(players_cards[0]._value)
             dealers_cards.append(deck.deal_a_card()) #Dealer deals himself a card
@@ -152,7 +159,7 @@ def blackey_jackey():
 
             print("\nDealer has dealt the opening cards.")
 
-            print("Your cards are:", players_cards[0],players_cards[1])
+            print("\nYour cards are:", players_cards[0],players_cards[1])
             print("Your total now, is:", player.get_total())
             print("\nDealer's first card is:", dealers_cards[0])
             print("Dealer's total on the first card is:", dealer_point_first)
